@@ -1,0 +1,36 @@
+<form action="/" method="POST" enctype="multipart/form-data">
+  <% if (locals.success === 1) { %>
+  <div class="alert alert-success alert-dismissible">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close"
+      >&times;</a>
+    <strong>Success!</strong> Your Image File is Uploaded.
+  </div>
+  <% } %>
+  <% if (locals.success === 2) { %>
+    <div class="alert alert-warning alert-dismissible">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close"
+        >&times;</a>
+      <strong>Warning!</strong> Your Image File was Deleted.
+    </div>
+    <% } %>
+
+  <div class="form-group">
+    <label for="Select Image:">Select Image:</label>
+    <input type="file" name="image" class="form-control" id="" />
+  </div>
+  <br />
+  <div class="form-group">
+    <button class="btn btn-block btn-danger">Upload Image</button>
+  </div>
+</form>
+
+
+<% records.forEach(function(ee){ %>
+<form action="/delete/<%= ee.imagename %>" method="post">
+  <input type="submit" value="&times;">
+</form>
+<img style="width: 100%" src="<%= ee.imagename %>" class="img-thumbnail" />
+<% }) %>
+  
+
+    
