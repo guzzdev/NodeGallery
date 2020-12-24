@@ -1,11 +1,11 @@
 const express = require("express");
-const expressLayouts = require('express-ejs-layouts');
+const expressLayouts = require("express-ejs-layouts");
 const multer = require("multer");
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 const imageModel = require("./models/upload");
-const imageData = imageModel.find({});
+const imageData = imageModel.find({}).sort([['_id', -1]]);
 
 const app = express();
 
@@ -19,7 +19,16 @@ var Storage = multer.diskStorage({
     callback(null, "./public/images");
   },
   filename: function (req, file, callback) {
-    callback(null, file.fieldname + "_" + Date.now() + "_" +  Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) + path.extname(file.originalname));
+    callback(
+      null,
+      file.fieldname +
+        "_" +
+        Date.now() +
+        "_" +
+        Math.random().toString(36).substring(2, 15) +
+        Math.random().toString(36).substring(2, 15) +
+        path.extname(file.originalname)
+    );
   },
 });
 
@@ -28,10 +37,16 @@ var upload = multer({
 }).single("image"); //Field name and max count
 
 app.get("/", (req, res) => {
-  imageData.exec(function (err, data) {
+  imageData.exec((err, data) => {
     if (err) throw err;
-    console.log(req.ip);
     res.render("home", { records: data });
+    var today = new Date();
+    console.log(
+      "\x1b[36m%s\x1b[0m",
+      `${today.getDate()}/${today.getMonth()}/${today.getFullYear()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()} : CONNECTED | ip : ' ${
+        req.ip
+      } `
+    );
   });
 });
 
@@ -41,47 +56,65 @@ app.post("/", (req, res) => {
       console.log(err);
       return res.end("Something went wrong");
     } else {
-      console.log(req.file.path);
       var imageName = req.file.filename;
-
       var imageDetails = new imageModel({
         imagename: imageName,
       });
-
       imageDetails.save(function (err, doc) {
         if (err) throw err;
+        var today = new Date();
+        console.log(
+          "\x1b[32m%s\x1b[0m",
+          `${today.getDate()}/${today.getMonth()}/${today.getFullYear()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()} : UPLOAD | ip : ' ${
+            req.ip
+          }\n   FILE : ${imageName}`
+        );
 
-        console.log("Image Saved");
-
-        imageData.exec(function (err, data) {
-          if (err) throw err;
-
-          res.render("home", { records: data, success: 1 });
-        });
+        res.redirect("/");
       });
     }
   });
 });
 
-//TODO: verify if file exist before deleting 
-app.post('/delete/:path', (req,res) => {
+app.post("/delete/:path", (req, res) => {
   try {
-    imageModel.deleteOne({ imagename: req.params['path'] }, function (err) {
-      if(err) console.log(err);
-      fs.unlinkSync("./public/images/"+req.params['path'])
-      console.log("Successful deletion");
-      imageData.exec(function (err, data) {
-        if (err) throw err;
-
-        res.render("home", { records: data, success: 2 });
-      });
+    let imagename = req.params["path"];
+    const path = './public/images/';
+    imageModel.find({ imagename: imagename }, (err, docs) => {
+      if(err) console.error(err);
+      if (
+        docs.length &&
+        fs.existsSync(path + imagename)
+      ) {
+        console.log("found");
+        imageModel.deleteOne({ imagename: imagename }, (err) => {
+          if (err) console.error(err);
+          fs.unlinkSync(path + imagename);
+          var today = new Date();
+          console.log(
+            "\x1b[31m%s\x1b[0m",
+            `${today.getDate()}/${today.getMonth()}/${today.getFullYear()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()} : DELETION | ip : ' ${
+              req.ip
+            }\n   FILE : ${path + imagename}`
+          );
+          res.redirect("/");
+        });
+      }
     });
-  } catch(err) {
-    console.error(err)
+  } catch (err) {
+    console.error(err);
   }
-})
+});
 
 app.listen(3000, () => {
-  var today = new Date()
-  console.log("App is listening on Port 3000 | "+ today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds() );
+  var today = new Date();
+  console.log(
+    "\x1b[42m%s\x1b[0m",
+    "App is listening on Port 3000 | " +
+      today.getHours() +
+      ":" +
+      today.getMinutes() +
+      ":" +
+      today.getSeconds()
+  );
 });
