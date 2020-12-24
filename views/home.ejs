@@ -1,18 +1,18 @@
+<br />
+<h1 class="text-center">Image Gallery</h1>
+<br />
 <form action="/" method="POST" enctype="multipart/form-data">
   <% if (locals.success === 1) { %>
   <div class="alert alert-success alert-dismissible">
-    <a href="#" class="close" data-dismiss="alert" aria-label="close"
-      >&times;</a>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     <strong>Success!</strong> Your Image File is Uploaded.
   </div>
+  <% } %> <% if (locals.success === 2) { %>
+  <div class="alert alert-warning alert-dismissible">
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <strong>Warning!</strong> Your Image File was Deleted.
+  </div>
   <% } %>
-  <% if (locals.success === 2) { %>
-    <div class="alert alert-warning alert-dismissible">
-      <a href="#" class="close" data-dismiss="alert" aria-label="close"
-        >&times;</a>
-      <strong>Warning!</strong> Your Image File was Deleted.
-    </div>
-    <% } %>
 
   <div class="form-group">
     <label for="Select Image:">Select Image:</label>
@@ -20,17 +20,13 @@
   </div>
   <br />
   <div class="form-group">
-    <button class="btn btn-block btn-danger">Upload Image</button>
+    <button class="btn btn-block btn-danger w-100">Upload Image</button>
   </div>
 </form>
 
-
-<% records.forEach(function(ee){ %>
-<form action="/delete/<%= ee.imagename %>" method="post">
-  <input type="submit" value="&times;">
+<% records.forEach(function(e){ %>
+<form action="/<%= e.imagename %>" method="post" class="img-thumbnail" style="margin-top: 20px;">
+  <input type="submit" style="float: right; font-size: x-large;" class="btn-close" value="" style="float: right;"/>
+  <img style="width: 100%;" src="<%= e.imagename %>"/>
 </form>
-<img style="width: 100%" src="<%= ee.imagename %>" class="img-thumbnail" />
 <% }) %>
-  
-
-    
