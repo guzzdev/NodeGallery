@@ -4,7 +4,7 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
-var Storage = multer.diskStorage({
+const Storage = multer.diskStorage({
   destination: (req, file, callback) => {
     callback(null, "./public/images");
   },
@@ -20,7 +20,7 @@ var Storage = multer.diskStorage({
   },
 });
 
-var upload = multer({
+const upload = multer({
   storage: Storage,
 }).single("image");
 
@@ -82,7 +82,7 @@ const deleteImage = async (req, res) => {
         ImageModel.deleteOne({ imagename: imagename }, (err) => {
           if (err) console.error(err);
           fs.unlinkSync(path + imagename);
-          var today = new Date();
+          let today = new Date();
           console.log(
             "\x1b[31m%s\x1b[0m",
             `${today.getDate()}/${today.getMonth()}/${today.getFullYear()} ${today.getHours()}:${today.getMinutes()}:${today.getSeconds()} : DELETION | ip : ' ${
