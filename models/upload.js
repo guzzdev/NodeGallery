@@ -4,6 +4,4 @@ const uploadSchema = new mongoose.Schema({
   imagename: String,
 });
 
-const uploadModel = mongoose.model("image", uploadSchema);
-
-module.exports = uploadModel;
+module.exports = mongoose.model("image", uploadSchema);
