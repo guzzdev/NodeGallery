@@ -2,3 +2,4 @@
 /public/images
 .env
 .vscode
+package-lock.json
