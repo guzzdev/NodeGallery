@@ -5,7 +5,7 @@ const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const connectDB = require("./config/db");
 const passport = require("passport");
-const flash = require("connect-flash");
+const flash = require("express-flash");
 const session = require("express-session");
 const methodOverride = require('method-override')
 const bodyParser = require('body-parser');
@@ -24,17 +24,17 @@ app.use(expressLayouts);
 
 app.use(express.static("public/images"));
 
-app.use(flash())
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(flash());
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false
 }))
-app.use(passport.initialize())
-app.use(passport.session())
-app.use(methodOverride('_method'))
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(methodOverride('_method'));
 
-app.use(bodyParser.urlencoded({extended: false}));
 
 app.use("/auth", authRoute);
 app.use("/", imageRoute);
