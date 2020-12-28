@@ -19,7 +19,7 @@ initializePassport(
   id => users.find(user => user.id === id)
 )
 
-router.get('/home', checkAuthenticated, (req, res) => {
+router.get('/', checkAuthenticated, (req, res) => {
   res.render('home.ejs', { name: req.user.username })
 })
 
@@ -30,7 +30,7 @@ router.get('/login', checkNotAuthenticated, (req, res) => {
 
 router.post('/login', checkNotAuthenticated, passport.authenticate('local', {
   successRedirect: '/',
-  failureRedirect: '/auth/error',
+  failureRedirect: '/auth/login',
   failureFlash: true
 }))
 
@@ -40,7 +40,6 @@ router.get('/register', checkNotAuthenticated, (req, res) => {
 
 router.post('/register', checkNotAuthenticated, async (req, res) => {
   try {
-    console.log(req.body)
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
     users.push({
       id: Date.now().toString(),
