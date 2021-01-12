@@ -9,11 +9,12 @@ const flash = require("express-flash");
 const session = require("express-session");
 const methodOverride = require('method-override')
 const bodyParser = require('body-parser');
-const users = require("./users")
 
+const imageRoute = require("./routes/index");
+const usersRoute = require("./routes/users");
 
-const imageRoute = require("./routes/image");
-const authRoute = require("./routes/auth");
+// Passport Config
+require('./config/passport')(passport);
 
 connectDB();
 
@@ -36,7 +37,7 @@ app.use(passport.session());
 app.use(methodOverride('_method'));
 
 
-app.use("/auth", authRoute);
+app.use("/auth", usersRoute);
 app.use("/", imageRoute);
 
 const PORT = process.env.PORT || 3000;
