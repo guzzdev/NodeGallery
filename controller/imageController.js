@@ -24,6 +24,9 @@ const upload = multer({
   storage: Storage,
 }).single("image");
 
+/**
+ * Get images from database
+ */
 const getImages = async (req, res, success = 0) => {
   try {
     const imageData = await ImageModel.find({}).sort([["_id", -1]]);
