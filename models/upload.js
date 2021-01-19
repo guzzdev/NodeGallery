@@ -1,7 +1,8 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const uploadSchema = new mongoose.Schema({
   imagename: String,
 });
 
-module.exports = mongoose.model("image", uploadSchema);
+module.exports = mongoose.model('image', uploadSchema);
+
