@@ -14,10 +14,11 @@ A small app that helps gathering family photos on my server.
 ## How to :
 ---
 - Install package with yarn or npm
+- `npm install`
 - Create .env file; required :
   - **PORT** => The port the app uses 
   - **MONGO_URI** => The MongoDB uri
-
+- `npm run prod`
 ## Example:
 ---
 
