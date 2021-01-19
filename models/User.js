@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
-// eslint-disable-next-line quotes
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcrypt');
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -24,3 +23,4 @@ UserSchema.methods.validatePassword = function(password) {
 };
 
 module.exports = mongoose.model('User', UserSchema);
+
