@@ -5,21 +5,21 @@ const bcrypt = require("bcrypt");
 const UserSchema = new mongoose.Schema({
   username: {
     type: String,
-    required: true
+    required: true,
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   date: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
 });
 // Methods
 UserSchema.methods.generateHash = (password) => bcrypt.hashSync(password, 10);
 
-UserSchema.methods.validatePassword = function(password) {
+UserSchema.methods.validatePassword = function validatePassword(password) {
   return bcrypt.compareSync(password, this.password);
 };
 
