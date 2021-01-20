@@ -42,6 +42,19 @@ app.use(methodOverride('_method'));
 
 app.use('/auth', usersRoute);
 app.use('/', imageRoute);
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(flash());
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false
+}))
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(methodOverride('_method'));
+
+
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -11,6 +11,7 @@ router.get('/', forwardAuthenticated, (req, res) => {
   res.render('home.ejs', { name: req.user.username });
 });
 
+
 // Login Page
 router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
 
@@ -80,6 +81,7 @@ router.post('/register', (req, res) => {
                 res.redirect('/auth/login');
               })
               .catch((err) => console.log(err));
+
           });
         });
       }
@@ -94,3 +96,4 @@ router.get('/logout', (req, res) => {
   res.redirect('/auth/login');
 });
 module.exports = router;
+
