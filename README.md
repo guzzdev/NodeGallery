@@ -32,14 +32,4 @@ PORT=3000
 MONGO_URI=mongodb://localhost:27017/imagesDB
 SESSION_SECRET=arandomkey
 ```
-
-## Env :
-
----
-
-- Node v14.15.2
-- NPM 6.14.9
-
----
-
-_Author : Louis OLIVE_
+#
