@@ -2,7 +2,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const errorHandler = require('./errorHandler');
-const ImageModel = require('../models/Upload');
+const ImageModel = require('../models/upload');
 
 const Storage = multer.diskStorage({
   destination: (req, file, callback) => {

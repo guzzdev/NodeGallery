@@ -1,6 +1,6 @@
 {
-  "name": "family-instagram",
-  "version": "1.0.5",
+  "name": "node-galley",
+  "version": "1.1.0",
   "description": "A small app that helps gathering family photos",
   "main": "app.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "prod": "node app.js"
   },
   "keywords": [],
-  "author": "Louis OLIVE",
+  "author": "guzzdev",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^8.2.0",
