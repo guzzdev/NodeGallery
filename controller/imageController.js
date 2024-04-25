@@ -43,6 +43,7 @@ const uploadImage = async (req, res) => {
       const imageName = req.file.filename;
       const imageDetails = new ImageModel({
         imagename: imageName,
+        author: req.user.username,
       });
       imageDetails.save((saveErr) => {
         if (saveErr) throw saveErr;
@@ -74,4 +75,45 @@ const deleteImage = async (req, res) => {
   }
 };
 
-module.exports = { getImages, uploadImage, deleteImage };
+const deleteOldImages = async () => {
+  try {
+    const savingPath = './public/images/';
+    ImageModel.find({}, (findErr, docs) => {
+      if (findErr) throw findErr;
+      docs.forEach((doc) => {
+        const currentTime = new Date().getTime();
+        const imageTime = new Date(doc.createdAt).getTime();
+        if (currentTime - imageTime > 3600000) {
+          ImageModel.deleteOne({ imagename: doc.imagename }, (deletionErr) => {
+            if (deletionErr) throw deletionErr;
+            fs.unlinkSync(savingPath + doc.imagename);
+          });
+        }
+      });
+    });
+  } catch (error) {
+    console.log(`Error: ${error}`);
+  }
+}
+
+deleteBigFiles = async () => {
+  try {
+    const savingPath = './public/images/';
+    ImageModel.find({}, (findErr, docs) => {
+      if (findErr) throw findErr;
+      docs.forEach((doc) => {
+        const image = fs.statSync(savingPath + doc.imagename);
+        if (image.size > 1000000) {
+          ImageModel.deleteOne({ imagename: doc.imagename }, (deletionErr) => {
+            if (deletionErr) throw deletionErr;
+            fs.unlinkSync(savingPath + doc.imagename);
+          });
+        }
+      });
+    });
+  } catch (error) {
+    console.log(`Error: ${error}`);
+  }
+}
+
+module.exports = { getImages, uploadImage, deleteImage, deleteOldImages, deleteBigFiles};

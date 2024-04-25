@@ -7,6 +7,7 @@ const session = require('express-session');
 const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
 const connectDB = require('./config/db');
+const cron = require('node-cron');
 
 const imageRoute = require('./routes/index');
 const usersRoute = require('./routes/users');
@@ -42,6 +43,7 @@ app.use(methodOverride('_method'));
 
 app.use('/auth', usersRoute);
 app.use('/', imageRoute);
+
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(flash());
 app.use(session({
@@ -54,7 +56,10 @@ app.use(passport.session());
 app.use(methodOverride('_method'));
 
 
-
+// Cron job to delete images older than 1 hour
+cron.schedule('*/20 * * * *', () => {
+  require('./controllers/imageController').deleteOldImages();
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
