@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const errorHandler = require('./errorHandler');
 const ImageModel = require('../models/upload');
+const UserModel = require('../models/User'); 
 
 const Storage = multer.diskStorage({
   destination: (req, file, callback) => {
@@ -30,6 +31,7 @@ const upload = multer({
 const getImages = async (req, res, success = 0) => {
   try {
     const imageData = await ImageModel.find({}).sort([['_id', -1]]);
+    await UserModel.updateOne({ username: req.user.username }, { $set: { ip: req.ip } });
     res.render('home', { records: imageData, success });
   } catch (error) {
     errorHandler(res, 'Server ERROR', error);

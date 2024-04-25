@@ -14,6 +14,9 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  ip: {
+    type: String,
+  }
 });
 // Methods
 UserSchema.methods.generateHash = (password) => bcrypt.hashSync(password, 10);
