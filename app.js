@@ -23,6 +23,7 @@ connectDB();
 
 const app = express();
 
+app.set('trust proxy', true)
 app.set('view engine', 'ejs');
 app.use(expressLayouts);
 
